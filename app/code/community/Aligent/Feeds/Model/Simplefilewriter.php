@@ -5,7 +5,11 @@
  * data is performed, however care is taken to ensure fields are always
  * exported in the correct order even when fields are missing.
  *
- * @methos setHeader()
+ * @category    Aligent
+ * @package     Aligent_Feeds
+ * @copyright   Copyright (c) 2013 Aligent Consulting
+ * @license     http://opensource.org/licenses/osl-3.0.php
+ * @method setHeader()
  * @method getHeader()
  * @method setStreamWriter()
  * @method getStreamWriter()

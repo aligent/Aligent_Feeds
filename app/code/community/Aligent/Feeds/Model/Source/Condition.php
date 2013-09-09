@@ -2,6 +2,11 @@
 
 /**
  * Based on code from: http://inchoo.net/ecommerce/magento/how-to-create-custom-attribute-source-type/
+ *
+ * @category    Aligent
+ * @package     Aligent_Feeds
+ * @copyright   Copyright (c) 2013 Aligent Consulting
+ * @license     http://opensource.org/licenses/osl-3.0.php
  */
 class Modelflight_Feeds_Model_Source_Condition extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
 

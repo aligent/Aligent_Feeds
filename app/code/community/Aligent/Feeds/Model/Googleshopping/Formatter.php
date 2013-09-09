@@ -2,6 +2,11 @@
 
 /**
  * Prepares catalog flat data for the Google Shopping feed export
+ *
+ * @category    Aligent
+ * @package     Aligent_Feeds
+ * @copyright   Copyright (c) 2013 Aligent Consulting
+ * @license     http://opensource.org/licenses/osl-3.0.php
  */
 class Aligent_Feeds_Model_Googleshopping_Formatter {
     const CONFIG_CONDITION = 'google/shopping/condition';
