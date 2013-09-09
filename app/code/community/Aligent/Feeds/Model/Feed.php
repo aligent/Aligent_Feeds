@@ -20,28 +20,14 @@ class Aligent_Feeds_Model_Feed {
         $this->_initWriters($oStore, $vFeedname, $oConfig);
 
         // Prepare the csv file header
-        $this->setHeader(array( // TODO Does not work
-                'identifier' => 'id',
-                'name' => 'title',
-                'description' => 'description',
-                'gshopping_category' => 'google product category',
-                'category' => 'product type',
-                'url' => 'link',
-                'image' => 'image link',
-                'gshopping_condition' => 'condition',
-                'availability' => 'availability',
-                'price' => 'Price',
-                'special_price' => 'sale price',
-                'special_price_date' => 'sale price effective date',
-                'brand' => 'brand',
-                'sku' => 'mpn',
-                'identifier_exists' => 'identifier_exists',
-            ))->writeHeaderRow();
+        Mage::getSingleton('aligent_feeds/log')->log("Begin preparing header rows...");
+        Mage::getSingleton('aligent_feeds/log')->logMemoryUsage();
+        $this->_prepareHeaders($oConfig);
 
         // Initialise the formatter
-        Mage::getSingleton('aligent_feeds/log')->log("Initialising Google Shopping Formatter...");
-        Mage::getSingleton('aligent_feeds/googleshopping_formatter')->init($oStore);
-        Mage::getSingleton('aligent_feeds/log')->log("Initialised Google Shopping Formatter.");
+        Mage::getSingleton('aligent_feeds/log')->log("Initialising Feed Formatter...");
+        Mage::getSingleton('aligent_feeds/feed_formatter')->init($oStore, $oConfig->fields);
+        Mage::getSingleton('aligent_feeds/log')->log("Initialised Feed Formatter.");
         Mage::getSingleton('aligent_feeds/log')->logMemoryUsage();
 
         $oConn = Mage::getModel('core/resource')->getConnection('catalog_read');
@@ -73,36 +59,43 @@ class Aligent_Feeds_Model_Feed {
         Mage::getSingleton('aligent_feeds/log')->log("Exporting products...");
         $oResource = Mage::getModel('core/resource_iterator')->walk($oSelect, array(
             function($aArgs) {
-                $aArgs['this']->log("Exporting product #".$aArgs['idx']."  SKU: ".$aArgs['row']['sku'], Zend_Log::DEBUG, true);
+                Mage::getSingleton('aligent_feeds/log')->log("Exporting product #".$aArgs['idx']."  SKU: ".$aArgs['row']['sku'], Zend_Log::DEBUG, true);
                 if (($aArgs['idx'] % 100) == 0) {
-                    $aArgs['this']->log("Exporting product #".$aArgs['idx']."...", Zend_Log::INFO);
-                    $aArgs['this']->logMemoryUsage();
+                    Mage::getSingleton('aligent_feeds/log')->log("Exporting product #".$aArgs['idx']."...", Zend_Log::INFO);
+                    Mage::getSingleton('aligent_feeds/log')->logMemoryUsage();
                 }
 
-                $aExportableRow = Mage::getSingleton('aligent_feeds/googleshopping_formatter')->prepareRow($aArgs['row']);
+                $aExportableRow = Mage::getSingleton('aligent_feeds/feed_formatter')->prepareRow($aArgs['row']);
                 if ($aExportableRow !== false) {
-                    $aArgs['writer']->writeDataRow($aExportableRow);
+                    foreach ($aArgs['writers'] as $oWriter) {
+                        $oWriter->writeDataRow($aExportableRow);
+                    }
                 }
             }), array(
-                'writer' => $oFileWriter,
-                'this' => $this
+                'writers' => $this->_oWriters,
             ));
 
-        $oIo->streamClose();
-        Mage::getSingleton('aligent_feeds/log')->log("Finished Google Shopping data export for store #".$oStore->getId()." - ".$oStore->getName());
+        $this->_closeWriters();
+        Mage::getSingleton('aligent_feeds/log')->log("Finished $vFeedname data export for store #".$oStore->getId()." - ".$oStore->getName());
         Mage::getSingleton('aligent_feeds/log')->logMemoryUsage();
         return $this;
     }
 
 
     protected function _initWriters(Mage_Core_Model_Store $oStore, $vFeedname, Mage_Core_Model_Config_Element $oConfig) {
-        foreach ($oConfig->output->getChildren() as $oOutputFile) {
+        foreach ($oConfig->output->children() as $oOutputFile) {
             switch (trim($oOutputFile->format)) {
                 case 'csv':
-                    $this->_oWriters = Mage::getModel('aligent_feeds/writer_csv')->init($oStore->getCode(), $vFeedname, $oOutputFile);
+                    $oWriter = Mage::getModel('aligent_feeds/writer_csv')->init($oStore->getCode(), $vFeedname, $oOutputFile);
+                    if ($oWriter instanceof Aligent_Feeds_Model_Writer_Abstract) {
+                        $this->_oWriters[] = $oWriter;
+                    }
                     break;
                 case 'xml':
-                    $this->_oWriters = Mage::getModel('aligent_feeds/writer_xml')->init($oStore->getCode(), $vFeedname, $oOutputFile);
+                    $oWriter = Mage::getModel('aligent_feeds/writer_xml')->init($oStore->getCode(), $vFeedname, $oOutputFile);
+                    if ($oWriter instanceof Aligent_Feeds_Model_Writer_Abstract) {
+                        $this->_oWriters[] = $oWriter;
+                    }
                     break;
             }
         }
@@ -110,4 +103,39 @@ class Aligent_Feeds_Model_Feed {
     }
 
 
+    /**
+     * Extract header details from XML and write to file(s)
+     *
+     * @param Mage_Core_Model_Config_Element $oConfig XML baed field mapping
+     * @return $this
+     */
+    protected function _prepareHeaders(Mage_Core_Model_Config_Element $oConfig) {
+        $aHeader = array();
+        foreach ($oConfig->fields->children() as $vKey => $oValue) {
+            if ($oValue->header) {
+                $aHeader[$vKey] = (string) $oValue->header;
+            } else {
+                $aHeader[$vKey] = $vKey;
+            }
+        }
+
+        foreach ($this->_oWriters as $oWriter) {
+            $oWriter->setHeader($aHeader)->writeHeaderRow();
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Closes the file writers once finished
+     *
+     * @return $this
+     */
+    protected function _closeWriters() {
+        foreach ($this->_oWriters as $oWriter) {
+            $oWriter->close();
+        }
+        return $this;
+    }
 }

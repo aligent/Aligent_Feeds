@@ -57,10 +57,66 @@
         <googleshopping>
             <fields>
                 <identifier>
+                    <header>ident</header>
                     <attribute>sku</attribute>
                     <value>-</value>
-                    <attribute>product_id</attribute>
+                    <special>store_id</special>
                 </identifier>
+                <title>
+                    <attribute>name</attribute>
+                </title>
+                <description>
+                    <attribute>short_description</attribute>
+                </description>
+                <gshopping_category>
+                    <header>google product category</header>
+                    <attribute>gshopping_category</attribute>
+                </gshopping_category>
+                <product_type>
+                    <header>product type</header>
+                    <singleton>
+                        <class>aligent_feeds/translator_category</class>
+                        <method>translate</method>
+                        <field>category_id</field>
+                    </singleton>
+                </product_type>
+                <url>
+                    <header>link</header>
+                    <special>base_url</special>
+                    <attribute>url_path</attribute>
+                </url>
+                <image>
+                    <header>image link</header>
+                    <special>media_base_url</special>
+                    <attribute>small_image</attribute>
+                </image>
+                <gshopping_condition>
+                    <header>condition</header>
+                    <singleton>
+                        <class>aligent_feeds/translator_condition</class>
+                        <method>translate</method>
+                        <field>gshopping_condition</field>
+                    </singleton>
+                </gshopping_condition>
+                <availability></availability>
+                <price>
+                    <attribute>price</attribute>
+                </price>
+                <special_price>
+                    <header>sale price</header>
+                    <attribute>special_price</attribute>
+                </special_price>
+                <special_price_date>
+                    <header>sale price effective date</header>
+                    <singleton>
+                        <class>aligent_feeds/translator_pricestartend</class>
+                        <method>translate</method>
+                    </singleton>
+                </special_price_date>
+                <sku>
+                    <header>mpn</header>
+                    <attribute>sku</attribute>
+                </sku>
             </fields>
             <output>
                 <text>

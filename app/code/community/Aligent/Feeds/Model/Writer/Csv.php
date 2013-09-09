@@ -26,7 +26,7 @@ class Aligent_Feeds_Model_Writer_Csv extends Aligent_Feeds_Model_Writer_Abstract
 
 
     public function init($vStoreCode, $vFeedname, Mage_Core_Model_Config_Element $oConfig) {
-        parent::init($vStoreCode, $vFeedname, Mage_Core_Model_Config_Element $oConfig);
+        parent::init($vStoreCode, $vFeedname, $oConfig);
 
         // Bail if there are issues creating the output file.
         if ($this->getFilename() === false) {
@@ -42,12 +42,14 @@ class Aligent_Feeds_Model_Writer_Csv extends Aligent_Feeds_Model_Writer_Abstract
         }
 
         if ($oConfig->delimiter) {
-            $this->setDelimiter($oConfig->delimiter);
+            $this->setDelimiter(str_replace("\\t", "\t", (string) $oConfig->delimiter));
         }
 
         if ($oConfig->enclosure) {
-            $this->setEnclosure($oConfig->enclosure);
+            $this->setEnclosure((string) $oConfig->enclosure);
         }
+
+        return $this;
     }
 
 
@@ -57,7 +59,7 @@ class Aligent_Feeds_Model_Writer_Csv extends Aligent_Feeds_Model_Writer_Abstract
      * @return $this
      */
     public function writeHeaderRow() {
-        $this->getStreamWriter()->streamWriteCsv(array_values($this->getHeader()), $this->getDelimiter(), $this->getEncolsure());
+        $this->getStreamWriter()->streamWriteCsv(array_values($this->getHeader()), $this->getDelimiter(), $this->getEnclosure());
         return $this;
     }
 
@@ -77,8 +79,17 @@ class Aligent_Feeds_Model_Writer_Csv extends Aligent_Feeds_Model_Writer_Abstract
                 $aRow[] = '';
             }
         }
-        $this->getStreamWriter()->streamWriteCsv($aRow, $this->getDelimiter(), $this->getEncolsure());
+        $this->getStreamWriter()->streamWriteCsv($aRow, $this->getDelimiter(), $this->getEnclosure());
 
+        return $this;
+    }
+
+
+    /**
+     * Closes the CSV file once finished.
+     */
+    public function close() {
+        $this->getStreamWriter()->streamClose();
         return $this;
     }
 }
