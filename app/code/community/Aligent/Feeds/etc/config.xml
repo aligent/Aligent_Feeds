@@ -26,14 +26,14 @@
     </global>
     <crontab>
         <jobs>
-            <export_google_shopping>
+            <export_feeds>
                 <schedule>
                     <cron_expr>30 5 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>aligent_feeds/cron::exportGoogleShopping</model>
+                    <model>aligent_feeds/cron::exportFeeds</model>
                 </run>
-            </export_google_shopping>
+            </export_feeds>
         </jobs>
     </crontab>
     <default>
@@ -53,4 +53,25 @@
             </google>
         </default>
     </stores>
+    <feeds>
+        <googleshopping>
+            <fields>
+                <identifier>
+                    <attribute>sku</attribute>
+                    <value>-</value>
+                    <attribute>product_id</attribute>
+                </identifier>
+            </fields>
+            <output>
+                <text>
+                    <format>csv</format>
+                    <delimiter>\t</delimiter>
+                    <enclosure>"</enclosure>
+                </text>
+                <xml>
+                    <format>xml</format>
+                </xml>
+            </output>
+        </googleshopping>
+    </feeds>
 </config>

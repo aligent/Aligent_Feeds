@@ -26,7 +26,7 @@ class Aligent_Feeds_Model_Googleshopping_Formatter {
      * actions required (e.g. loading categories) to set up the process.
      *
      * @param Mage_Core_Model_Store $oStore The store context in which this export occurs
-     * @return Modelflight_Feeds_Model_Googleshopping_Formatter $this
+     * @return Aligent_Feeds_Model_Googleshopping_Formatter $this
      */
     public function init(Mage_Core_Model_Store $oStore) {
         $this->_iStoreId = $oStore->getId();
@@ -72,8 +72,8 @@ class Aligent_Feeds_Model_Googleshopping_Formatter {
      * @return array|bool False if this product shouldn't be exported.  Array of data ready to be written to CSV otherwise.
      */
     public function prepareRow($aRow) {
-        $availability = Mage::getSingleton('modelflight_catalog/system_config_source_availability')->getGoogleAvailability($aRow['availability']);
-        if ($availability == Modelflight_Catalog_Model_System_Config_Source_Availability::GOOGLE_NOT_IN_FEED) {
+        $availability = Mage::getSingleton('modcatalog/system_config_source_availability')->getGoogleAvailability($aRow['availability']);
+        if ($availability == Aligent_Catalog_Model_System_Config_Source_Availability::GOOGLE_NOT_IN_FEED) {
             return false;
         }
 

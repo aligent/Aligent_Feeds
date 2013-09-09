@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2013 Aligent Consulting
  * @license     http://opensource.org/licenses/osl-3.0.php
  */
-class Modelflight_Feeds_Model_Source_Condition extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
+class Aligent_Feeds_Model_Source_Condition extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
 
     const CONDITION_NEW = 1;
     const CONDITION_USED = 2;
@@ -17,15 +17,15 @@ class Modelflight_Feeds_Model_Source_Condition extends Mage_Eav_Model_Entity_Att
     public function getAllOptions() {
         return array(
             array(
-                'label' => Mage::helper('mffeeds')->__('New'),
+                'label' => Mage::helper('aligent_feeds')->__('New'),
                 'value' => self::CONDITION_NEW,
             ),
             array(
-                'label' => Mage::helper('mffeeds')->__('Used'),
+                'label' => Mage::helper('aligent_feeds')->__('Used'),
                 'value' => self::CONDITION_USED,
             ),
             array(
-                'label' => Mage::helper('mffeeds')->__('Refurbished'),
+                'label' => Mage::helper('aligent_feeds')->__('Refurbished'),
                 'value' => self::CONDITION_REFURBISHED,
             ),
         );
