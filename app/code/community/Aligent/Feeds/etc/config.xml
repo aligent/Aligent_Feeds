@@ -37,22 +37,12 @@
         </jobs>
     </crontab>
     <default>
-        <google>
-            <shopping>
-                <enable>0</enable>
+        <feeds>
+            <googleshopping>
                 <condition>1</condition>
-            </shopping>
-        </google>
+            </googleshopping>
+        </feeds>
     </default>
-    <stores>
-        <default>
-            <google>
-                <shopping>
-                    <enable>1</enable>
-                </shopping>
-            </google>
-        </default>
-    </stores>
     <feeds>
         <googleshopping>
             <fields>

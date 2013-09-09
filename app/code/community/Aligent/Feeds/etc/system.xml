@@ -1,9 +1,16 @@
 <?xml version="1.0"?>
 <config>
     <sections>
-        <google>
+        <feeds>
+            <label>Data Feeds</label>
+            <tab>advanced</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>999</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
             <groups>
-                <shopping translate="label">
+                <googleshopping translate="label">
                     <label>Google Shopping Feed</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>600</sort_order>
@@ -11,15 +18,6 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <enable translate="label">
-                            <label>Generate Feed</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </enable>
                         <condition translate="label">
                             <label>Default Condition</label>
                             <frontend_type>select</frontend_type>
@@ -30,8 +28,8 @@
                             <show_in_store>1</show_in_store>
                         </condition>
                     </fields>
-                </shopping>
+                </googleshopping>
             </groups>
-        </google>
+        </feeds>
     </sections>
 </config>

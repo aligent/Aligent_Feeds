@@ -9,7 +9,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php
  */
 class Aligent_Feeds_Model_Translator_Condition {
-    const CONFIG_CONDITION = 'google/shopping/condition';
+    const CONFIG_CONDITION = 'feeds/googleshopping/condition';
 
     protected $_iDefaultCondition;
     protected $_iStoreId = false;
