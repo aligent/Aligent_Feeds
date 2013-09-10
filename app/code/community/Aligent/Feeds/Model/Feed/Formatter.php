@@ -48,9 +48,15 @@ class Aligent_Feeds_Model_Feed_Formatter {
             foreach ($oFieldConfig->children() as $vType => $data) {
                 if (substr($vType, 0, 9) == 'attribute') {
                     $vAttribute = (string) $data;
+                    $vAttributeValue = '';
                     if (array_key_exists($vAttribute, $aRow)) {
-                        $vValue .= $aRow[$vAttribute];
+                        $vAttributeValue .= $aRow[$vAttribute];
                     }
+                    if ($data->getAttribute('defaultValue') && $vAttributeValue == '') {
+                        $vAttributeValue = (string) $data->getAttribute('defaultValue');
+                    }
+                    $vValue .= $vAttributeValue;
+
                 } elseif (substr($vType, 0, 5) == 'value') {
                     $vValue .= (string) $data;
                 } elseif (substr($vType, 0, 7) == 'special') {
