@@ -41,6 +41,9 @@
             <googleshopping>
                 <condition>1</condition>
             </googleshopping>
+            <enable>
+                <googleshopping>1</googleshopping>
+            </enable>
         </feeds>
     </default>
     <feeds>
