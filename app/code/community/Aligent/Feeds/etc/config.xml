@@ -38,6 +38,9 @@
     </crontab>
     <default>
         <feeds>
+            <general>
+                <reindex>0</reindex>
+            </general>
             <googleshopping>
                 <condition>1</condition>
             </googleshopping>
