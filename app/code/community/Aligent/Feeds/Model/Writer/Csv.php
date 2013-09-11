@@ -74,7 +74,11 @@ class Aligent_Feeds_Model_Writer_Csv extends Aligent_Feeds_Model_Writer_Abstract
         $aRow = array();
         foreach ($this->getHeader() as $vKey => $vTitle) {
             if (array_key_exists($vKey, $aData)) {
-                $aRow[] = $aData[$vKey];
+                if (is_array($aData[$vKey])) {
+                    $aRow[] = implode(',', $aData[$vKey]);
+                } else {
+                    $aRow[] = $aData[$vKey];
+                }
             } else {
                 $aRow[] = '';
             }

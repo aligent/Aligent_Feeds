@@ -76,7 +76,12 @@ class Aligent_Feeds_Model_Feed_Formatter {
                     $vMethod = (string) $data->method;
                     $vField = (string) $data->field;
 
-                    $vValue .= Mage::getSingleton($vClass)->{$vMethod}($aRow, $vField, $this->_oStore);
+                    $vSingletonValue = Mage::getSingleton($vClass)->{$vMethod}($aRow, $vField, $this->_oStore);
+                    if (is_array($vSingletonValue)) {
+                        $vValue = $vSingletonValue;
+                    } else {
+                        $vValue .= $vSingletonValue;
+                    }
                 }
             }
             $aRet[$vKey] = $vValue;
