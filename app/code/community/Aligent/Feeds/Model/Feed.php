@@ -56,6 +56,18 @@ class Aligent_Feeds_Model_Feed {
                 )
             )->where('visibility IN (?)', array(Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG, Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH));
 
+        // Allow the feed definition to include a "before_query_filter".  This method
+        // will be allowed to modify the query before it's executed.
+        if ($oConfig->before_query_filter) {
+            Mage::getSingleton('aligent_feeds/log')->log("Calling before query filter...");
+            $vClass = (string) $oConfig->before_query_filter->class;
+            $vMethod = (string) $oConfig->before_query_filter->method;
+            $vParams = (array) $oConfig->before_query_filter->params;
+
+            Mage::getSingleton($vClass)->{$vMethod}($oSelect, $oStore, $vParams);
+            Mage::getSingleton('aligent_feeds/log')->log("Before query filter done.");
+        }
+
         Mage::getSingleton('aligent_feeds/log')->log("Exporting products...");
         $oResource = Mage::getModel('core/resource_iterator')->walk($oSelect, array(
             function($aArgs) {
