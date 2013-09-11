@@ -35,6 +35,7 @@ class Aligent_Feeds_Model_Cron {
         Mage::getModel('core/store')->getCollection()->walk(function($oStore) {
             $oFeeds = Mage::getConfig()->getNode(Aligent_Feeds_Model_Cron::XML_PATH_FEEDS);
             foreach($oFeeds->children() as $vFeedName => $oFeed) {
+                Mage::getSingleton('aligent_feeds/status')->setFeedName($vFeedName);
                 $vConfigName = Aligent_Feeds_Model_Cron::CONFIG_ENABLED_PREFIX.$vFeedName;
                 if (Mage::getStoreConfigFlag($vConfigName, $oStore->getId())) {
                     Mage::getModel('aligent_feeds/feed')->export($oStore, $vFeedName, $oFeed);
