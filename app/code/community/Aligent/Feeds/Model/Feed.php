@@ -10,6 +10,13 @@
  */
 class Aligent_Feeds_Model_Feed {
 
+    const CONFIG_FTP_ENABLED = 'feeds/general/ftp';
+    const CONFIG_FTP_HOST = 'feeds/general/ftp_host';
+    const CONFIG_FTP_USER = 'feeds/general/ftp_user';
+    const CONFIG_FTP_PASS = 'feeds/general/ftp_pass';
+    const CONFIG_FTP_PATH = 'feeds/general/ftp_path';
+
+
     protected $_oWriters = array();
 
     public function export(Mage_Core_Model_Store $oStore, $vFeedname, Mage_Core_Model_Config_Element $oConfig) {
@@ -71,6 +78,9 @@ class Aligent_Feeds_Model_Feed {
         Mage::getSingleton('aligent_feeds/log')->log("Exporting products...");
         $oResource = Mage::getModel('core/resource_iterator')->walk($oSelect, array(
             function($aArgs) {
+                if ($aArgs['idx'] > 5) {
+                    return;
+                }
                 Mage::getSingleton('aligent_feeds/log')->log("Exporting product #".$aArgs['idx']."  SKU: ".$aArgs['row']['sku'], Zend_Log::DEBUG, true);
                 if (($aArgs['idx'] % 100) == 0) {
                     Mage::getSingleton('aligent_feeds/log')->log("Exporting product #".$aArgs['idx']."...", Zend_Log::INFO);
@@ -93,6 +103,8 @@ class Aligent_Feeds_Model_Feed {
             ));
 
         $this->_closeWriters();
+        $this->_sendFeed();
+
         Mage::getSingleton('aligent_feeds/log')->log("Finished $vFeedname data export for store #".$oStore->getId()." - ".$oStore->getName());
         Mage::getSingleton('aligent_feeds/log')->logMemoryUsage();
         return $this;
@@ -154,5 +166,46 @@ class Aligent_Feeds_Model_Feed {
             $oWriter->close();
         }
         return $this;
+    }
+
+
+    /**
+     * Upload Feed to FTP server if required.
+     */
+    protected function _sendFeed() {
+        if (Mage::getStoreConfigFlag(self::CONFIG_FTP_ENABLED)) {
+            $oFtp = new Varien_Io_Ftp();
+            $bSuccess = $oFtp->open(
+                array(
+                    'host' => Mage::getStoreConfig(self::CONFIG_FTP_HOST),
+                    'user' => Mage::getStoreConfig(self::CONFIG_FTP_USER),
+                    'password' => Mage::getStoreConfig(self::CONFIG_FTP_PASS),
+                )
+            );
+            if (!$bSuccess) {
+                Mage::getSingleton('aligent_feeds/log')->log("Unable to connect to FTP Server");
+                Mage::getSingleton('aligent_feeds/status')->addError("", "Unable to connect to FTP Server");
+                return;
+            }
+
+            $bSuccess = $oFtp->cd(Mage::getStoreConfig(self::CONFIG_FTP_PATH));
+            if (!$bSuccess) {
+                Mage::getSingleton('aligent_feeds/log')->log("Unable change directories on FTP Server");
+                Mage::getSingleton('aligent_feeds/status')->addError("", "Unable to connect to FTP Server");
+                return;
+            }
+
+            foreach ($this->_oWriters as $oWriter) {
+                $vFilename = $oWriter->getFilename();
+                $bSuccess = $oFtp->write(basename($vFilename), $vFilename);
+                if (!$bSuccess) {
+                    Mage::getSingleton('aligent_feeds/log')->log("Unable to upload $vFilename to FTP server");
+                    Mage::getSingleton('aligent_feeds/status')->addError("", "Unable to upload $vFilename to FTP server");
+                    return;
+                }
+            }
+
+            $oFtp->close();
+        }
     }
 }

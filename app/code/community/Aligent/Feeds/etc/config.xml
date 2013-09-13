@@ -40,6 +40,7 @@
         <feeds>
             <general>
                 <reindex>0</reindex>
+                <ftp>0</ftp>
             </general>
             <googleshopping>
                 <condition>1</condition>
