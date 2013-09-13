@@ -43,7 +43,7 @@ class Aligent_Feeds_Model_Feed_Formatter {
     public function prepareRow($aRow) {
         $aRet = array();
 
-        foreach ($this->_oConfig->children() as $vKey => $oFieldConfig) {
+        foreach ($this->_oConfig->fields->children() as $vKey => $oFieldConfig) {
             $vValue = '';
             foreach ($oFieldConfig->children() as $vType => $data) {
                 if (substr($vType, 0, 9) == 'attribute') {
@@ -86,6 +86,22 @@ class Aligent_Feeds_Model_Feed_Formatter {
                 }
             }
             $aRet[$vKey] = $vValue;
+        }
+
+        // Wrap the generated row into an array.  The after_item_filter might
+        // want to export several copies of this item (e.g. for configurable
+        // products)
+        $aRet = array(0 => $aRet);
+
+        // Allow the feed definition to include an "after_item_filter".  This method
+        // will be allowed to modify the generated rows (including adding more) before
+        // it's exported.
+        if ($this->_oConfig->after_item_filter) {
+            $vClass = (string) $this->_oConfig->after_item_filter->class;
+            $vMethod = (string) $this->_oConfig->after_item_filter->method;
+            $aParams = (array) $this->_oConfig->after_item_filter->params;
+
+            $aRet = Mage::getSingleton($vClass)->{$vMethod}($aRet, $this->_oStore, $aParams);
         }
 
        return $aRet;

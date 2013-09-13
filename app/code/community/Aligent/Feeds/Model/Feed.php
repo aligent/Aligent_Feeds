@@ -26,7 +26,7 @@ class Aligent_Feeds_Model_Feed {
 
         // Initialise the formatter
         Mage::getSingleton('aligent_feeds/log')->log("Initialising Feed Formatter...");
-        Mage::getSingleton('aligent_feeds/feed_formatter')->init($oStore, $oConfig->fields);
+        Mage::getSingleton('aligent_feeds/feed_formatter')->init($oStore, $oConfig);
         Mage::getSingleton('aligent_feeds/log')->log("Initialised Feed Formatter.");
         Mage::getSingleton('aligent_feeds/log')->logMemoryUsage();
 
@@ -62,9 +62,9 @@ class Aligent_Feeds_Model_Feed {
             Mage::getSingleton('aligent_feeds/log')->log("Calling before query filter...");
             $vClass = (string) $oConfig->before_query_filter->class;
             $vMethod = (string) $oConfig->before_query_filter->method;
-            $vParams = (array) $oConfig->before_query_filter->params;
+            $aParams = (array) $oConfig->before_query_filter->params;
 
-            Mage::getSingleton($vClass)->{$vMethod}($oSelect, $oStore, $vParams);
+            Mage::getSingleton($vClass)->{$vMethod}($oSelect, $oStore, $aParams);
             Mage::getSingleton('aligent_feeds/log')->log("Before query filter done.");
         }
 
@@ -77,14 +77,19 @@ class Aligent_Feeds_Model_Feed {
                     Mage::getSingleton('aligent_feeds/log')->logMemoryUsage();
                 }
 
-                $aExportableRow = Mage::getSingleton('aligent_feeds/feed_formatter')->prepareRow($aArgs['row']);
-                if ($aExportableRow !== false) {
-                    foreach ($aArgs['writers'] as $oWriter) {
-                        $oWriter->writeDataRow($aExportableRow);
+                $aRows = Mage::getSingleton('aligent_feeds/feed_formatter')->prepareRow($aArgs['row']);
+
+                if (count($aRows) > 0) {
+                    foreach ($aRows as $aRow) {
+                        foreach ($aArgs['writers'] as $oWriter) {
+                            $oWriter->writeDataRow($aRow);
+                        }
                     }
                 }
             }), array(
                 'writers' => $this->_oWriters,
+                'config' => $oConfig,
+                'store' => $oStore,
             ));
 
         $this->_closeWriters();
