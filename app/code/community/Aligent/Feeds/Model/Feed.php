@@ -103,13 +103,13 @@ class Aligent_Feeds_Model_Feed {
         foreach ($oConfig->output->children() as $oOutputFile) {
             switch (trim($oOutputFile->format)) {
                 case 'csv':
-                    $oWriter = Mage::getModel('aligent_feeds/writer_csv')->init($oStore->getCode(), $vFeedname, $oOutputFile);
+                    $oWriter = Mage::getModel('aligent_feeds/writer_csv')->init($oStore->getCode(), $vFeedname, $oOutputFile, $oConfig->fields);
                     if ($oWriter instanceof Aligent_Feeds_Model_Writer_Abstract) {
                         $this->_oWriters[] = $oWriter;
                     }
                     break;
                 case 'xml':
-                    $oWriter = Mage::getModel('aligent_feeds/writer_xml')->init($oStore->getCode(), $vFeedname, $oOutputFile);
+                    $oWriter = Mage::getModel('aligent_feeds/writer_xml')->init($oStore->getCode(), $vFeedname, $oOutputFile, $oConfig->fields);
                     if ($oWriter instanceof Aligent_Feeds_Model_Writer_Abstract) {
                         $this->_oWriters[] = $oWriter;
                     }

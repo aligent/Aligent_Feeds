@@ -52,11 +52,12 @@
     <feeds>
         <googleshopping>
             <fields>
-                <identifier>
+                <id>
+                    <xml_tag>g:id</xml_tag>
                     <attribute>sku</attribute>
                     <value>-</value>
                     <special>store_id</special>
-                </identifier>
+                </id>
                 <title>
                     <attribute>name</attribute>
                 </title>
@@ -65,10 +66,12 @@
                 </description>
                 <gshopping_category>
                     <header>google product category</header>
+                    <xml_tag>g:google_product_category</xml_tag>
                     <attribute>gshopping_category</attribute>
                 </gshopping_category>
                 <product_type>
                     <header>product type</header>
+                    <xml_tag>g:product_type</xml_tag>
                     <singleton>
                         <class>aligent_feeds/translator_category</class>
                         <method>translate</method>
@@ -77,32 +80,40 @@
                 </product_type>
                 <url>
                     <header>link</header>
+                    <xml_tag>link</xml_tag>
                     <special>base_url</special>
                     <attribute>url_path</attribute>
                 </url>
                 <image>
                     <header>image link</header>
+                    <xml_tag>g:image_link</xml_tag>
                     <special>media_base_url</special>
                     <attribute>small_image</attribute>
                 </image>
                 <gshopping_condition>
                     <header>condition</header>
+                    <xml_tag>g:condition</xml_tag>
                     <singleton>
                         <class>aligent_feeds/translator_condition</class>
                         <method>translate</method>
                         <field>gshopping_condition</field>
                     </singleton>
                 </gshopping_condition>
-                <availability></availability>
+                <availability>
+                    <xml_tag>g:availability</xml_tag>
+                </availability>
                 <price>
+                    <xml_tag>g:price</xml_tag>
                     <attribute>price</attribute>
                 </price>
                 <special_price>
                     <header>sale price</header>
+                    <xml_tag>g:sale_price</xml_tag>
                     <attribute>special_price</attribute>
                 </special_price>
                 <special_price_date>
                     <header>sale price effective date</header>
+                    <xml_tag>g:sale_price_effective_date</xml_tag>
                     <singleton>
                         <class>aligent_feeds/translator_pricestartend</class>
                         <method>translate</method>
@@ -110,6 +121,7 @@
                 </special_price_date>
                 <sku>
                     <header>mpn</header>
+                    <xml_tag>g:mpn</xml_tag>
                     <attribute>sku</attribute>
                 </sku>
             </fields>

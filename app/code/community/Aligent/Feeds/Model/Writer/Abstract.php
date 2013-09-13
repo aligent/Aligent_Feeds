@@ -5,7 +5,7 @@ abstract class Aligent_Feeds_Model_Writer_Abstract extends Varien_Object {
     protected $_vFileExtension = 'txt';
     const FEED_PATH = '/feeds';
 
-    public function init($vStoreCode, $vFeedname, Mage_Core_Model_Config_Element $oConfig) {
+    public function init($vStoreCode, $vFeedname, Mage_Core_Model_Config_Element $oConfig, Mage_Core_Model_Config_Element $oFields) {
         $this->setFilename($this->_getFilename($vStoreCode, $vFeedname));
     }
 

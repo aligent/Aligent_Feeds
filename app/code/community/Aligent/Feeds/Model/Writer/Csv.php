@@ -25,7 +25,7 @@ class Aligent_Feeds_Model_Writer_Csv extends Aligent_Feeds_Model_Writer_Abstract
     }
 
 
-    public function init($vStoreCode, $vFeedname, Mage_Core_Model_Config_Element $oConfig) {
+    public function init($vStoreCode, $vFeedname, Mage_Core_Model_Config_Element $oConfig, Mage_Core_Model_Config_Element $oFields) {
         parent::init($vStoreCode, $vFeedname, $oConfig);
 
         // Bail if there are issues creating the output file.
