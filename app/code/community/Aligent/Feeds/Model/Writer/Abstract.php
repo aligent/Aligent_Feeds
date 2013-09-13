@@ -2,7 +2,7 @@
 
 abstract class Aligent_Feeds_Model_Writer_Abstract extends Varien_Object {
 
-    const FILE_EXTENSION = 'txt';
+    protected $_vFileExtension = 'txt';
     const FEED_PATH = '/feeds';
 
     public function init($vStoreCode, $vFeedname, Mage_Core_Model_Config_Element $oConfig) {
@@ -35,7 +35,7 @@ abstract class Aligent_Feeds_Model_Writer_Abstract extends Varien_Object {
             Mage::getSingleton('aligent_feeds/log')->log("Feed export directory does not exist: ".$vFeedDir);
             return false;
         }
-        $vFileName = $vFeedDir.'/'.$vFeedname.'-'.$vStoreCode.'.'.self::FILE_EXTENSION;
+        $vFileName = $vFeedDir.'/'.$vFeedname.'-'.$vStoreCode.'.'.$this->_vFileExtension;
         if (!file_exists($vFileName)) {
             touch($vFileName);
         }

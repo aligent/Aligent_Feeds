@@ -16,7 +16,7 @@
  */
 class Aligent_Feeds_Model_Writer_Csv extends Aligent_Feeds_Model_Writer_Abstract {
 
-    const FILE_EXTENSION = 'csv';
+    protected $_vFileExtension = 'csv';
 
     public function __construct() {
         $this

@@ -2,7 +2,7 @@
 
 class Aligent_Feeds_Model_Writer_Xml extends Aligent_Feeds_Model_Writer_Abstract {
 
-    const FILE_EXTENSION = 'xml';
+    protected $_vFileExtension = 'xml';
 
     /**
      * Writes the header row to the file where appropriate
