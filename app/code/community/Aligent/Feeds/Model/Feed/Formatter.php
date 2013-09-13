@@ -37,11 +37,11 @@ class Aligent_Feeds_Model_Feed_Formatter {
     /**
      * Formats a single row of catalog flat data for use in the Google Shopping feed
      *
-     * @param array $aRow A row from the catalog_product_flat_x table.
+     * @param array $aDbRow A row from the catalog_product_flat_x table.
      * @return array|bool False if this product shouldn't be exported.  Array of data ready to be written to CSV otherwise.
      */
-    public function prepareRow($aRow) {
-        $aRet = array();
+    public function prepareRow($aDbRow) {
+        $aFeedRow = array();
 
         foreach ($this->_oConfig->fields->children() as $vKey => $oFieldConfig) {
             $vValue = '';
@@ -49,8 +49,8 @@ class Aligent_Feeds_Model_Feed_Formatter {
                 if (substr($vType, 0, 9) == 'attribute') {
                     $vAttribute = (string) $data;
                     $vAttributeValue = '';
-                    if (array_key_exists($vAttribute, $aRow)) {
-                        $vAttributeValue .= $aRow[$vAttribute];
+                    if (array_key_exists($vAttribute, $aDbRow)) {
+                        $vAttributeValue .= $aDbRow[$vAttribute];
                     }
                     if ($data->getAttribute('defaultValue') && $vAttributeValue == '') {
                         $vAttributeValue = (string) $data->getAttribute('defaultValue');
@@ -77,7 +77,7 @@ class Aligent_Feeds_Model_Feed_Formatter {
                     $vField = (string) $data->field;
                     $aParams = (array) $data->params;
 
-                    $vSingletonValue = Mage::getSingleton($vClass)->{$vMethod}($aRow, $vField, $this->_oStore, $aParams);
+                    $vSingletonValue = Mage::getSingleton($vClass)->{$vMethod}($aDbRow, $vField, $this->_oStore, $aParams);
                     if (is_array($vSingletonValue)) {
                         $vValue = $vSingletonValue;
                     } else {
@@ -85,13 +85,13 @@ class Aligent_Feeds_Model_Feed_Formatter {
                     }
                 }
             }
-            $aRet[$vKey] = $vValue;
+            $aFeedRow[$vKey] = $vValue;
         }
 
         // Wrap the generated row into an array.  The after_item_filter might
         // want to export several copies of this item (e.g. for configurable
         // products)
-        $aRet = array(0 => $aRet);
+        $aFeedRows = array(0 => $aFeedRow);
 
         // Allow the feed definition to include an "after_item_filter".  This method
         // will be allowed to modify the generated rows (including adding more) before
@@ -101,10 +101,10 @@ class Aligent_Feeds_Model_Feed_Formatter {
             $vMethod = (string) $this->_oConfig->after_item_filter->method;
             $aParams = (array) $this->_oConfig->after_item_filter->params;
 
-            $aRet = Mage::getSingleton($vClass)->{$vMethod}($aRet, $this->_oStore, $aParams);
+            $aFeedRows = Mage::getSingleton($vClass)->{$vMethod}($aDbRow, $aFeedRows, $this->_oStore, $aParams);
         }
 
-       return $aRet;
+       return $aFeedRows;
     }
 
 }
