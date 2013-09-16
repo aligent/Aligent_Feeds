@@ -21,29 +21,34 @@ class Aligent_Feeds_Model_Cron {
      * Cron job which kicks off the feed export.
      */
     public function exportFeeds() {
-        if (Mage::getStoreConfigFlag(self::CONFIG_REINDEX)) {
-            Mage::getSingleton('aligent_feeds/log')->log('Starting Catalog Flat Product reindex...');
-            $indexProcess = Mage::getSingleton('index/indexer')->getProcessByCode('catalog_product_flat');
-            $indexProcess->reindexEverything();
-            Mage::getSingleton('aligent_feeds/log')->log('Catalog Flat Product Reindex finished!');
-            Mage::getSingleton('aligent_feeds/log')->log('Starting Catalog Flat Category reindex...');
-            $indexProcess = Mage::getSingleton('index/indexer')->getProcessByCode('catalog_category_flat');
-            $indexProcess->reindexEverything();
-            Mage::getSingleton('aligent_feeds/log')->log('Catalog Flat Category Reindex finished!');
+        try {
+            if (Mage::getStoreConfigFlag(self::CONFIG_REINDEX)) {
+                Mage::getSingleton('aligent_feeds/log')->log('Starting Catalog Flat Product reindex...');
+                $indexProcess = Mage::getSingleton('index/indexer')->getProcessByCode('catalog_product_flat');
+                $indexProcess->reindexEverything();
+                Mage::getSingleton('aligent_feeds/log')->log('Catalog Flat Product Reindex finished!');
+                Mage::getSingleton('aligent_feeds/log')->log('Starting Catalog Flat Category reindex...');
+                $indexProcess = Mage::getSingleton('index/indexer')->getProcessByCode('catalog_category_flat');
+                $indexProcess->reindexEverything();
+                Mage::getSingleton('aligent_feeds/log')->log('Catalog Flat Category Reindex finished!');
+            }
+
+            Mage::getModel('core/store')->getCollection()->walk(function($oStore) {
+                $oFeeds = Mage::getConfig()->getNode(Aligent_Feeds_Model_Cron::XML_PATH_FEEDS);
+                foreach($oFeeds->children() as $vFeedName => $oFeed) {
+                    Mage::getSingleton('aligent_feeds/status')->setFeedName($vFeedName);
+                    $vConfigName = Aligent_Feeds_Model_Cron::CONFIG_ENABLED_PREFIX.$vFeedName;
+                    if (Mage::getStoreConfigFlag($vConfigName, $oStore->getId())) {
+                        Mage::getModel('aligent_feeds/feed')->export($oStore, $vFeedName, $oFeed);
+                    }
+                }
+            });
+        } catch (Exception $e) {
+            Mage::getSingleton('aligent_feeds/status')->addError('', "Exception during feed generation: ".$e->getMessage());
         }
 
-        Mage::getModel('core/store')->getCollection()->walk(function($oStore) {
-            $oFeeds = Mage::getConfig()->getNode(Aligent_Feeds_Model_Cron::XML_PATH_FEEDS);
-            foreach($oFeeds->children() as $vFeedName => $oFeed) {
-                Mage::getSingleton('aligent_feeds/status')->setFeedName($vFeedName);
-                $vConfigName = Aligent_Feeds_Model_Cron::CONFIG_ENABLED_PREFIX.$vFeedName;
-                if (Mage::getStoreConfigFlag($vConfigName, $oStore->getId())) {
-                    Mage::getModel('aligent_feeds/feed')->export($oStore, $vFeedName, $oFeed);
-                }
-            }
-        });
+        Mage::getSingleton('aligent_feeds/status')->sendStatusEmail();
 
-        //die("Argh!"); // Debugging
     }
 
 }

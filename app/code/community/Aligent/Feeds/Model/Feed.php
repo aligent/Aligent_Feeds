@@ -78,6 +78,9 @@ class Aligent_Feeds_Model_Feed {
         Mage::getSingleton('aligent_feeds/log')->log("Exporting products...");
         $oResource = Mage::getModel('core/resource_iterator')->walk($oSelect, array(
             function($aArgs) {
+                if ($aArgs['idx'] > 100) {
+                    return;
+                }
                 Mage::getSingleton('aligent_feeds/log')->log("Exporting product #".$aArgs['idx']."  SKU: ".$aArgs['row']['sku'], Zend_Log::DEBUG, true);
                 if (($aArgs['idx'] % 100) == 0) {
                     Mage::getSingleton('aligent_feeds/log')->log("Exporting product #".$aArgs['idx']."...", Zend_Log::INFO);
@@ -102,6 +105,7 @@ class Aligent_Feeds_Model_Feed {
         $this->_closeWriters();
         $this->_sendFeed();
 
+        Mage::getSingleton('aligent_feeds/status')->addSuccess("Generated $vFeedname data for store #".$oStore->getId()." - ".$oStore->getName());
         Mage::getSingleton('aligent_feeds/log')->log("Finished $vFeedname data export for store #".$oStore->getId()." - ".$oStore->getName());
         Mage::getSingleton('aligent_feeds/log')->logMemoryUsage();
         return $this;

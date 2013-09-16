@@ -80,6 +80,15 @@
                                 <ftp>1</ftp>
                             </depends>
                         </ftp_path>
+                        <email_to translate="label">
+                            <label>Send Status Report Email To</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Use commas to separate multiple recipients.</comment>
+                        </email_to>
                     </fields>
                 </general>
                 <googleshopping translate="label">
