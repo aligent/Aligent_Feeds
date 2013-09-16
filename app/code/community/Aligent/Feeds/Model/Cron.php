@@ -43,7 +43,7 @@ class Aligent_Feeds_Model_Cron {
             }
         });
 
-        die("Argh!"); // Debugging
+        //die("Argh!"); // Debugging
     }
 
 }
