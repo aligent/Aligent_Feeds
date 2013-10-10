@@ -35,7 +35,7 @@ class Aligent_Feeds_Model_Feed_Formatter {
     }
 
     /**
-     * Formats a single row of catalog flat data for use in the Google Shopping feed
+     * Formats a single row of catalog flat data for use in the data feed
      *
      * @param array $aDbRow A row from the catalog_product_flat_x table.
      * @return array|bool False if this product shouldn't be exported.  Array of data ready to be written to CSV otherwise.
@@ -44,6 +44,12 @@ class Aligent_Feeds_Model_Feed_Formatter {
         $aFeedRow = array();
 
         foreach ($this->_oConfig->fields->children() as $vKey => $oFieldConfig) {
+            // If the field's definition includes an "<exclude />" tag, remove it from the export data.
+            foreach ($oFieldConfig->children() as $vType => $data) {
+                if ($vType == 'exclude') {
+                    continue(2);
+                }
+            }
             $vValue = '';
             foreach ($oFieldConfig->children() as $vType => $data) {
                 if (substr($vType, 0, 9) == 'attribute') {

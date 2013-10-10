@@ -139,6 +139,14 @@ class Aligent_Feeds_Model_Feed {
     protected function _prepareHeaders(Mage_Core_Model_Config_Element $oConfig) {
         $aHeader = array();
         foreach ($oConfig->fields->children() as $vKey => $oValue) {
+            // If the field's definition includes an "<exclude />" tag, remove it from the export data.
+            foreach ($oValue->children() as $vType => $data) {
+                if ($vType == 'exclude') {
+                    continue(2);
+                }
+            }
+
+
             if ($oValue->header) {
                 $aHeader[$vKey] = (string) $oValue->header;
             } else {
