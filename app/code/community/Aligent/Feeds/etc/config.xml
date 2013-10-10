@@ -120,11 +120,10 @@
                         <method>translate</method>
                     </singleton>
                 </special_price_date>
-                <sku>
-                    <header>mpn</header>
+                <mpn>
                     <xml_tag>g:mpn</xml_tag>
                     <attribute>sku</attribute>
-                </sku>
+                </mpn>
             </fields>
             <output>
                 <text>
