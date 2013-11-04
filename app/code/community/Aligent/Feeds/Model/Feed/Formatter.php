@@ -82,12 +82,15 @@ class Aligent_Feeds_Model_Feed_Formatter {
                     $vMethod = (string) $data->method;
                     $vField = (string) $data->field;
                     $aParams = (array) $data->params;
+                    $bRemoved = isset($data->remove);
 
-                    $vSingletonValue = Mage::getSingleton($vClass)->{$vMethod}($aDbRow, $vField, $this->_oStore, $aParams);
-                    if (is_array($vSingletonValue)) {
-                        $vValue = $vSingletonValue;
-                    } else {
-                        $vValue .= $vSingletonValue;
+                    if (!$bRemoved) {
+                        $vSingletonValue = Mage::getSingleton($vClass)->{$vMethod}($aDbRow, $vField, $this->_oStore, $aParams);
+                        if (is_array($vSingletonValue)) {
+                            $vValue = $vSingletonValue;
+                        } else {
+                            $vValue .= $vSingletonValue;
+                        }
                     }
                 }
             }
