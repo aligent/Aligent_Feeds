@@ -19,6 +19,6 @@ class Aligent_Feeds_Model_Translator_Filter {
      * @return mixed
      */
     public function translate($aRow, $vField, $oStore) {
-        return strip_tags($aRow[$vField]);
+        return str_replace(array("\r", "\n", "\t"), " ", strip_tags(iconv('UTF-8', 'ASCII//TRANSLIT', $aRow[$vField])));
     }
 }
