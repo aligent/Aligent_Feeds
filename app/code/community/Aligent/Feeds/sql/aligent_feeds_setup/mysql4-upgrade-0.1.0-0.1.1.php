@@ -1,5 +1,5 @@
 <?php
-$setup = new Mage_Catalog_Model_Resource_Setup('core_setup');
+$setup = new Mage_Catalog_Model_Resource_Eav_Mysql4_Setup('core_setup');
 
 $attr = array (
     'attribute_model' => NULL,
@@ -8,9 +8,9 @@ $attr = array (
     'table' => NULL,
     'frontend' => NULL,
     'input' => 'select',
-    'label' => 'Google Shopping Category',
+    'label' => 'Google Shopping Condition',
     'frontend_class' => NULL,
-    'source' => 'eav/entity_attribute_source_table',
+    'source' => 'aligent_feeds/source_condition',
     'required' => '0',
     'user_defined' => '1',
     'default' => '',
@@ -35,27 +35,14 @@ $attr = array (
     'wysiwyg_enabled' => '0',
     'used_for_promo_rules' => '0',
     'search_weight' => '1',
-    'option' =>
-    array (
-        'values' => array(),
-    ),
 );
 
-$fh = fopen(__DIR__.'/taxonomy.en-US.txt', 'r');
-// Discard the first line, it's a comment.
-$vLine = fgets($fh);
-while (!feof($fh)) {
-    $attr['option']['values'][] = trim(fgets($fh));
-}
-fclose($fh);
-
-
-$setup->addAttribute('catalog_product', 'gshopping_category', $attr);
+$setup->addAttribute('catalog_product', 'gshopping_condition', $attr);
 
 $aAttributeSetIds = $setup->getAllAttributeSetIds('catalog_product');
-$iAttributeId = $setup->getAttributeId('catalog_product', 'gshopping_category');
+$iAttributeId = $setup->getAttributeId('catalog_product', 'gshopping_condition');
 
 foreach ($aAttributeSetIds as $iAttributeSetId) {
     $iAttributeGroupId = $setup->getAttributeGroupId('catalog_product', $iAttributeSetId, 'Meta Information');
-    $setup->addAttributeToSet('catalog_product',$iAttributeSetId, $iAttributeGroupId, $iAttributeId, 5);
+    $setup->addAttributeToSet('catalog_product',$iAttributeSetId, $iAttributeGroupId, $iAttributeId, 6);
 }
