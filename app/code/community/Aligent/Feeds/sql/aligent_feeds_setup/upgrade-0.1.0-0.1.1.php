@@ -1,5 +1,5 @@
 <?php
-$setup = new Mage_Catalog_Model_Resource_Setup('core_setup');
+$setup = new Mage_Catalog_Model_Resource_Eav_Mysql4_Setup('core_setup');
 
 $attr = array (
     'attribute_model' => NULL,
