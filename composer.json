@@ -1,0 +1,11 @@
+{
+  "name":"aligent/feeds",
+  "type":"magento-module",
+  "license":"OSL-3.0",
+  "homepage":"https://github.com/aligent/Aligent_Feeds.git",
+  "description":"Customisable data feeds (e.g. Google Shopping) for Magento. Optimised for large catalogs.",
+  "require":{
+    "magento-hackathon/magento-composer-installer":"*"
+  }
+}
+
