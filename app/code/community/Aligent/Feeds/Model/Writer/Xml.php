@@ -22,7 +22,10 @@ class Aligent_Feeds_Model_Writer_Xml extends Aligent_Feeds_Model_Writer_Abstract
 
         $this->_oXmlWriter = new XMLWriter();
         $this->_oXmlWriter->openUri($vFileName);
-
+        //Write rss version
+        $this->_oXmlWriter->startElement('rss');
+        $this->_oXmlWriter->writeAttribute('version','2.0');
+        $this->_oXmlWriter->writeAttribute('xmlns:g','http://base.google.com/ns/1.0');
         // Write Atom feed header for Google Shopping
         $this->_oXmlWriter->startElement('feed');
         $this->_oXmlWriter->writeElement('title', Mage::app($vStoreCode)->getDefaultStoreView()->getFrontendName());
