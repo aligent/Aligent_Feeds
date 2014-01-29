@@ -68,7 +68,7 @@
                 <gshopping_category>
                     <header>google product category</header>
                     <xml_tag>g:google_product_category</xml_tag>
-                    <attribute>gshopping_category</attribute>
+                    <attribute>gshopping_category_value</attribute>
                 </gshopping_category>
                 <product_type>
                     <header>product type</header>
