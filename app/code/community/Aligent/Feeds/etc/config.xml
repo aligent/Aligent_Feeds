@@ -82,8 +82,10 @@
                 <url>
                     <header>link</header>
                     <xml_tag>link</xml_tag>
-                    <special>base_url</special>
-                    <attribute>url_path</attribute>
+                    <singleton>
+                        <class>aligent_feeds/translator_url</class>
+                        <method>translate</method>
+                    </singleton>
                 </url>
                 <image>
                     <header>image link</header>
