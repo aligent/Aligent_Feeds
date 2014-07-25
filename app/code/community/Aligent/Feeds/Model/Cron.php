@@ -33,7 +33,7 @@ class Aligent_Feeds_Model_Cron {
                 Mage::getSingleton('aligent_feeds/log')->log('Catalog Flat Category Reindex finished!');
             }
 
-            Mage::getModel('core/store')->getCollection()->walk(function($oStore) {
+            $this->getStores()->walk(function($oStore) {
                 $oFeeds = Mage::getConfig()->getNode(Aligent_Feeds_Model_Cron::XML_PATH_FEEDS);
                 foreach($oFeeds->children() as $vFeedName => $oFeed) {
                     Mage::getSingleton('aligent_feeds/status')->setFeedName($vFeedName);
@@ -49,6 +49,15 @@ class Aligent_Feeds_Model_Cron {
 
         Mage::getSingleton('aligent_feeds/status')->sendStatusEmail();
 
+    }
+
+    protected function getStores() {
+        $stores = Mage::getModel('core/store')->getCollection();
+        if (class_exists('Enterprise_Staging_Model_Staging')) {
+            $subquery = $stores->getConnection()->select()->from(array("es" => "enterprise_staging"), "staging_website_id");
+            $stores->getSelect()->where("main_table.website_id not in ($subquery)");
+        }
+        return $stores;
     }
 
 }
