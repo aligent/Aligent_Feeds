@@ -33,7 +33,7 @@ class Aligent_Feeds_Model_Writer_Xml extends Aligent_Feeds_Model_Writer_Abstract
         $this->_oXmlWriter->writeElement('title', Mage::app($vStoreCode)->getDefaultStoreView()->getFrontendName());
         $this->_oXmlWriter->startElement('link');
         $this->_oXmlWriter->writeAttribute('rel', 'self');
-        $this->_oXmlWriter->writeAttribute('href', Mage::getUrl());
+        $this->_oXmlWriter->writeAttribute('href', Mage::app()->getStore($vStoreCode)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK));
         $this->_oXmlWriter->endElement();
         $this->_oXmlWriter->writeElement('updated', date(DATE_ATOM));
 
