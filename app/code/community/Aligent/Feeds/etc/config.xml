@@ -138,5 +138,72 @@
                 </xml>
             </output>
         </googleshopping>
+        <ebayfeed>
+            <fields>
+                <sku>
+                    <xml_tag>Merchant_SKU</xml_tag>
+                    <attribute>sku</attribute>
+                    <value>-</value>
+                    <special>store_id</special>
+                </sku>
+                <name>
+                    <xml_tag>Product_Name</xml_tag>
+                    <attribute>name</attribute>
+                </name>
+                <url>
+                    <header>link</header>
+                    <xml_tag>Product_Url</xml_tag>
+                    <singleton>
+                        <class>aligent_feeds/translator_url</class>
+                        <method>translate</method>
+                    </singleton>
+                </url>
+                <image>
+                    <header>image link</header>
+                    <xml_tag>Image_URL</xml_tag>
+                    <special>media_base_url</special>
+                    <attribute>small_image</attribute>
+                </image>
+                <price>
+                    <attribute>price</attribute>
+                </price>
+                <availability>
+                    <value>-</value>
+                </availability>
+                <brand>
+
+                </brand>
+                <condition>
+
+                </condition>
+                <mpn>
+                    <attribute>sku</attribute>
+                </mpn>
+                <description>
+                    <attribute>short_description</attribute>
+                </description>
+                <type>
+                    <header>google product category</header>
+                    <xml_tag>g:google_product_category</xml_tag>
+                    <attribute>gshopping_category_value</attribute>
+                </type>
+                <category>
+
+                </category>
+                <category_id>
+
+                </category_id>
+            </fields>
+            <output>
+                <text>
+                    <format>csv</format>
+                    <delimiter>\t</delimiter>
+                    <enclosure>"</enclosure>
+                </text>
+                <xml>
+                    <format>xml</format>
+                </xml>
+            </output>
+        </ebayfeed>
     </feeds>
 </config>
