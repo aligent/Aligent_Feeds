@@ -1,16 +1,15 @@
 <?php
 
 /**
- * Performs translations specific to the "Condition" value for Google Shopping.
+ * Performs translations specific to the "Condition" value.
  *
  * @category    Aligent
  * @package     Aligent_Feeds
  * @copyright   Copyright (c) 2013 Aligent Consulting
  * @license     http://opensource.org/licenses/osl-3.0.php
  */
-class Aligent_Feeds_Model_Translator_Condition {
-    const CONFIG_CONDITION = 'feeds/googleshopping/condition';
-
+abstract class Aligent_Feeds_Model_Translator_Abstract_Condition {
+    protected $_vConfigHandle; //Must be defined in inheriting class
     protected $_iDefaultCondition;
     protected $_iStoreId = false;
 
@@ -24,7 +23,7 @@ class Aligent_Feeds_Model_Translator_Condition {
      */
     public function translate($aRow, $vField, $oStore) {
         if ($oStore->getId() !== $this->_iStoreId) {
-            $this->_iDefaultCondition = Mage::getStoreConfig(self::CONFIG_CONDITION, $oStore->getId());
+            $this->_iDefaultCondition = Mage::getStoreConfig($this->_vConfigHandle, $oStore->getId());
             $this->_iStoreId = $oStore->getId();
         }
 
@@ -32,6 +31,15 @@ class Aligent_Feeds_Model_Translator_Condition {
         if (array_key_exists($vField, $aRow)) {
             $vFieldValue = $aRow[$vField];
         }
-        return Mage::getSingleton('aligent_feeds/source_condition')->getGoogleValue($vFieldValue ? $vFieldValue : $this->_iDefaultCondition);
+
+        return $this->_getSourceValue($vFieldValue ? $vFieldValue : $this->_iDefaultCondition);
     }
+
+    /**
+     * @param $vFieldValue
+     * @return mixed
+     *
+     * Get Source Value for specific implementation
+     */
+    abstract function _getSourceValue($vFieldValue);
 }
