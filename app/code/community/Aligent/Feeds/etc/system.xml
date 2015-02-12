@@ -127,15 +127,22 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </condition>
-                        <condition translate="label">
+                        <category translate="label">
                             <label>Default Category</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>aligent_feeds/source_category</source_model>
+                            <frontend_type>text</frontend_type>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </condition>
+                        </category>
+                        <category_id translate="label">
+                            <label>Default Category ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </category_id>
                     </fields>
                 </ebay>
             </groups>
