@@ -48,6 +48,12 @@
             <enable>
                 <googleshopping>1</googleshopping>
             </enable>
+            <ebayfeed>
+                <condition>1</condition>
+            </ebayfeed>
+            <enable>
+                <ebayfeed>1</ebayfeed>
+            </enable>
         </feeds>
     </default>
     <feeds>
@@ -97,7 +103,7 @@
                     <header>condition</header>
                     <xml_tag>g:condition</xml_tag>
                     <singleton>
-                        <class>aligent_feeds/translator_condition</class>
+                        <class>aligent_feeds/translator_googlecondition</class>
                         <method>translate</method>
                         <field>gshopping_condition</field>
                     </singleton>
@@ -143,7 +149,6 @@
                 <sku>
                     <xml_tag>Merchant_SKU</xml_tag>
                     <attribute>sku</attribute>
-                    <value>-</value>
                     <special>store_id</special>
                 </sku>
                 <name>
@@ -151,7 +156,6 @@
                     <attribute>name</attribute>
                 </name>
                 <url>
-                    <header>link</header>
                     <xml_tag>Product_Url</xml_tag>
                     <singleton>
                         <class>aligent_feeds/translator_url</class>
@@ -159,39 +163,68 @@
                     </singleton>
                 </url>
                 <image>
-                    <header>image link</header>
                     <xml_tag>Image_URL</xml_tag>
                     <special>media_base_url</special>
                     <attribute>small_image</attribute>
                 </image>
                 <price>
+                    <xml_tag>Current_Price</xml_tag>
                     <attribute>price</attribute>
                 </price>
                 <availability>
+                    <xml_tag>Stock_Availability</xml_tag>
                     <value>-</value>
+                    <singleton>
+                        <class>aligent_feeds/translator_availability</class>
+                        <method>translate</method>
+                    </singleton>
                 </availability>
-                <brand>
-
-                </brand>
                 <condition>
-
+                    <xml_tag>Condition</xml_tag>
+                    <singleton>
+                        <class>aligent_feeds/translator_ebaycondition</class>
+                        <method>translate</method>
+                        <field>condition</field>
+                    </singleton>
                 </condition>
+                <manufacturer>
+                    <xml_tag>Manufacturer</xml_tag>
+                    <singleton>
+                        <class>aligent_feeds/translator_brand</class>
+                        <method>translate</method>
+                    </singleton>
+                </manufacturer>
                 <mpn>
+                    <xml_tag>MPN</xml_tag>
                     <attribute>sku</attribute>
                 </mpn>
                 <description>
+                    <xml_tag>Product_Description</xml_tag>
                     <attribute>short_description</attribute>
                 </description>
                 <type>
-                    <header>google product category</header>
-                    <xml_tag>g:google_product_category</xml_tag>
-                    <attribute>gshopping_category_value</attribute>
+                    <xml_tag>Product_Type</xml_tag>
+                    <singleton>
+                        <class>aligent_feeds/translator_category</class>
+                        <method>translate</method>
+                        <field>category_id</field>
+                    </singleton>
                 </type>
                 <category>
-
+                    <xml_tag>Category</xml_tag>
+                    <singleton>
+                        <class>aligent_feeds/translator_configvalue</class>
+                        <method>translate</method>
+                        <field>feeds/ebay/category</field>
+                    </singleton>
                 </category>
                 <category_id>
-
+                    <xml_tag>Category_ID</xml_tag>
+                    <singleton>
+                        <class>aligent_feeds/translator_configvalue</class>
+                        <method>translate</method>
+                        <field>feeds/ebay/category_id</field>
+                    </singleton>
                 </category_id>
             </fields>
             <output>
