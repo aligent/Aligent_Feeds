@@ -187,13 +187,6 @@
                         <field>condition</field>
                     </singleton>
                 </condition>
-                <manufacturer>
-                    <xml_tag>Manufacturer</xml_tag>
-                    <singleton>
-                        <class>aligent_feeds/translator_brand</class>
-                        <method>translate</method>
-                    </singleton>
-                </manufacturer>
                 <mpn>
                     <xml_tag>MPN</xml_tag>
                     <attribute>sku</attribute>
