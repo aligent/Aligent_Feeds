@@ -53,7 +53,7 @@ class Aligent_Feeds_Model_Cron {
 
     protected function getStores() {
         $stores = Mage::getModel('core/store')->getCollection();
-        if (class_exists('Enterprise_Staging_Model_Staging')) {
+        if (@class_exists('Enterprise_Staging_Model_Staging')) {
             $subquery = $stores->getConnection()->select()->from(array("es" => "enterprise_staging"), "staging_website_id");
             $stores->getSelect()->where("main_table.website_id not in ($subquery)");
         }
