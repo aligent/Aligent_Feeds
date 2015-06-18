@@ -43,6 +43,11 @@ class Aligent_Feeds_Model_Feed_Formatter {
     public function prepareRow($aDbRow) {
         $aFeedRow = array();
 
+        /**
+         * Fetches all the configuration in feeds/<feed_name>/fields and loops through fields
+         * Applies processors on them to get the value
+         * Builds Key value of field and processed value
+         */
         foreach ($this->_oConfig->fields->children() as $vKey => $oFieldConfig) {
             // If the field's definition includes an "<exclude />" tag, remove it from the export data.
             foreach ($oFieldConfig->children() as $vType => $data) {
@@ -51,12 +56,17 @@ class Aligent_Feeds_Model_Feed_Formatter {
                 }
             }
             $vValue = '';
+            /**
+             * loops configuration of a field, vType is tag name and $data is value inside the tag
+             * Applies the processors having type attribute,value,special and singleton
+             * Concatenates result of individual outcomes to produce outcome for the field
+             */
             foreach ($oFieldConfig->children() as $vType => $data) {
                 if (substr($vType, 0, 9) == 'attribute') {
                     $vAttribute = (string) $data;
                     $vAttributeValue = '';
                     if (array_key_exists($vAttribute, $aDbRow)) {
-                        $vAttributeValue .= $aDbRow[$vAttribute];
+                        $vAttributeValue = $aDbRow[$vAttribute];
                     }
                     if ($data->getAttribute('defaultValue') && $vAttributeValue == '') {
                         $vAttributeValue = (string) $data->getAttribute('defaultValue');
@@ -94,6 +104,7 @@ class Aligent_Feeds_Model_Feed_Formatter {
                     }
                 }
             }
+            //vKey is the Field Name provided in feeds/<feed_name>/fields tags
             $aFeedRow[$vKey] = $vValue;
         }
 
