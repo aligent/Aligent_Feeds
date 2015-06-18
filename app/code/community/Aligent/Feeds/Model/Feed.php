@@ -126,6 +126,9 @@ class Aligent_Feeds_Model_Feed {
                     break;
             }
         }
+        if (!$this->_oWriters){
+            throw new Exception('No write configured please look in log for more details');
+        }
         return $this;
     }
 
