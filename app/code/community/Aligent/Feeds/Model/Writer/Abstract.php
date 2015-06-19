@@ -33,7 +33,7 @@ abstract class Aligent_Feeds_Model_Writer_Abstract extends Varien_Object {
         $vFeedDir = Mage::getBaseDir().self::FEED_PATH;
         if (!is_dir($vFeedDir)) {
             Mage::getSingleton('aligent_feeds/log')->log("Feed export directory does not exist: ".$vFeedDir);
-            throw new Exception("Feed folder $vFeedDir does not exist");
+            return false;
 
         }
         $vFileName = $vFeedDir.'/'.$vFeedname.'-'.$vStoreCode.'.'.$this->_vFileExtension;
@@ -43,7 +43,8 @@ abstract class Aligent_Feeds_Model_Writer_Abstract extends Varien_Object {
         if (is_writable($vFileName)) {
             return $vFileName;
         } else {
-            $this->_log("Feed file is not writable: ".$vFileName);
+            $vMessage = "Feed file is not writable: ".$vFileName;
+            Mage::getSingleton('aligent_feeds/log')->log($vMessage);
             return false;
         }
 
