@@ -8,6 +8,8 @@ class Aligent_Feeds_Model_Writer_Xml extends Aligent_Feeds_Model_Writer_Abstract
     protected $_oXmlWriter;
 
     protected $_aTagMap;
+    protected $_aTagConfig = array();
+    const FIELDS_TAG = 'fields';
 
     public function init($vStoreCode, $vFeedname, Mage_Core_Model_Config_Element $oConfig, Mage_Core_Model_Config_Element $oFields) {
         parent::init($vStoreCode, $vFeedname, $oConfig, $oFields);
@@ -47,12 +49,33 @@ class Aligent_Feeds_Model_Writer_Xml extends Aligent_Feeds_Model_Writer_Abstract
             } else {
                 $aTagMap[$vKey] = $vKey;
             }
+            if (count($oNode->config)) {
+                $oConfig = $oNode->config;
+                $this->_aTagConfig[$vKey] = $this->nodeToArray($oConfig);
+            }
         }
         $this->_aTagMap = $aTagMap;
-
         return $this;
     }
 
+    /**
+     * @param $oNode Mage_Core_Model_Config_Element
+     */
+    protected function nodeToArray($oNode)
+    {
+        $aResult = array();
+        /** @var   Mage_Core_Model_Config_Element $oChildNode          */
+        foreach ($oNode->children() as $vKey => $oChildNode) {
+            if (count($oChildNode->children())){
+                $value = $this->nodeToArray($oChildNode);
+            }
+            else{
+                $value = (string) $oChildNode;
+            }
+            $aResult[$vKey] = $value;
+        }
+        return $aResult;
+    }
 
     /**
      * Writes the header row to the file where appropriate
@@ -81,8 +104,23 @@ class Aligent_Feeds_Model_Writer_Xml extends Aligent_Feeds_Model_Writer_Abstract
                     $this->_oXmlWriter->endElement();
                 } else {
                     if (is_array($aRow[$vIdx])) {
-                        foreach ($aRow[$vIdx] as $vValue) {
-                            $this->_oXmlWriter->writeElement($vTag, $vValue);
+                        $aFields = array();
+                        if (isset($this->_aTagConfig[$vIdx]) && !empty($this->_aTagConfig[$vIdx][self::FIELDS_TAG])){
+                            $aFields = $this->_aTagConfig[$vIdx][self::FIELDS_TAG];
+                        }
+                        //custom subfields in xml for example for shipping
+                        if ($aFields){
+                            $this->_oXmlWriter->startElement($vTag);
+                            foreach ($aRow[$vIdx] as $vKey => $vValue) {
+                                $vSubTag = $this->_aTagConfig[$vIdx][self::FIELDS_TAG][$vKey]['xml_tag'];
+                                $this->_oXmlWriter->writeElement($vSubTag, $vValue);
+                            }
+                            $this->_oXmlWriter->endElement();
+                        }
+                        else{
+                            foreach ($aRow[$vIdx] as $vValue) {
+                                $this->_oXmlWriter->writeElement($vTag, $vValue);
+                            }
                         }
                     } else {
                         $this->_oXmlWriter->writeElement($vTag, $aRow[$vIdx]);
