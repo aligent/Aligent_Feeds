@@ -12,7 +12,8 @@ class Aligent_Feeds_Model_Log {
 
     // Name of the log file in var/log
     const LOG_FILE = 'feed.log';
-
+    const CONFIG_LOG_ALL = 'feeds/log/all';
+    protected $_bLogAll;
 
     /**
      * Logging for Feed exporter
@@ -21,8 +22,8 @@ class Aligent_Feeds_Model_Log {
      * @param boolean $bDeveloperModeOnly True to log only in Developer mode
      */
     public function log($message, $level = Zend_Log::INFO, $bDeveloperModeOnly = false) {
-        if ($bDeveloperModeOnly == false || ($bDeveloperModeOnly == true && Mage::getIsDeveloperMode())) {
-            Mage::log($message, $level, self::LOG_FILE);
+        if ($this->isLoggable($bDeveloperModeOnly)) {
+            Mage::log($message, $level, self::LOG_FILE, $this->_bLogAll);
         }
         return $this;
     }
@@ -38,5 +39,16 @@ class Aligent_Feeds_Model_Log {
         return $this;
     }
 
-
+    public function isLoggable($bDeveloperModeOnly)
+    {
+        if (is_null($this->_bLogAll)){
+            $this->_bLogAll = Mage::getStoreConfigFlag(self::CONFIG_LOG_ALL);
+        }
+        if ($this->_bLogAll || ($bDeveloperModeOnly == false) || ($bDeveloperModeOnly == true && Mage::getIsDeveloperMode())) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
