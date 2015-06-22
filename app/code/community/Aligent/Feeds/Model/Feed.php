@@ -76,6 +76,8 @@ class Aligent_Feeds_Model_Feed {
         }
 
         Mage::getSingleton('aligent_feeds/log')->log("Exporting products...");
+        Mage::getSingleton('aligent_feeds/log')->log("fetch sql is " .  $oSelect->__toString());
+
         $oResource = Mage::getModel('core/resource_iterator')->walk($oSelect, array(
             function($aArgs) {
                 Mage::getSingleton('aligent_feeds/log')->log("Exporting product #".$aArgs['idx']."  SKU: ".$aArgs['row']['sku'], Zend_Log::DEBUG, true);
