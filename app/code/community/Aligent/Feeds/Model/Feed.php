@@ -76,7 +76,7 @@ class Aligent_Feeds_Model_Feed {
         }
 
         Mage::getSingleton('aligent_feeds/log')->log("Exporting products...");
-        Mage::getSingleton('aligent_feeds/log')->log("fetch sql is " .  $oSelect->__toString());
+        Mage::getSingleton('aligent_feeds/log')->log("fetch sql is " .  ($vSql = $oSelect->__toString()));
 
         $oResource = Mage::getModel('core/resource_iterator')->walk($oSelect, array(
             function($aArgs) {
