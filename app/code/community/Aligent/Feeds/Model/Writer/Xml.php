@@ -98,11 +98,6 @@ class Aligent_Feeds_Model_Writer_Xml extends Aligent_Feeds_Model_Writer_Abstract
         $this->_oXmlWriter->startElement('entry');
         foreach ($this->_aTagMap as $vIdx => $vTag) {
             if (array_key_exists($vIdx, $aRow)) {
-                if ($vTag == 'link') {
-                    $this->_oXmlWriter->startElement('link');
-                    $this->_oXmlWriter->writeAttribute('href', $aRow[$vIdx]);
-                    $this->_oXmlWriter->endElement();
-                } else {
                     if (is_array($aRow[$vIdx])) {
                         $aFields = array();
                         if (isset($this->_aTagConfig[$vIdx]) && !empty($this->_aTagConfig[$vIdx][self::FIELDS_TAG])){
@@ -125,8 +120,6 @@ class Aligent_Feeds_Model_Writer_Xml extends Aligent_Feeds_Model_Writer_Abstract
                     } else {
                         $this->_oXmlWriter->writeElement($vTag, $aRow[$vIdx]);
                     }
-
-                }
             }
         }
         $this->_oXmlWriter->endElement();
