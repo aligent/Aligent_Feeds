@@ -90,7 +90,7 @@
                 <image>
                     <header>image link</header>
                     <xml_tag>g:image_link</xml_tag>
-                    <special>media_base_url</special>
+                    <special>catalog_image_base_url</special>
                     <attribute>small_image</attribute>
                 </image>
                 <gshopping_condition>

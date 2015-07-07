@@ -14,6 +14,7 @@ class Aligent_Feeds_Model_Feed_Formatter {
 
     protected $_vBaseUrl;
     protected $_vMediaBaseUrl;
+    protected $_vCatalogImageBaseUrl;
 
     protected $_oConfig;
 
@@ -30,6 +31,7 @@ class Aligent_Feeds_Model_Feed_Formatter {
         $this->_oStore = $oStore;
         $this->_vBaseUrl = $oStore->getBaseUrl();
         $this->_vMediaBaseUrl = $oStore->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+        $this->_vCatalogImageBaseUrl = $this->_vMediaBaseUrl . 'catalog/product/';
 
         return $this;
     }
@@ -85,6 +87,9 @@ class Aligent_Feeds_Model_Feed_Formatter {
                             break;
                         case 'media_base_url':
                             $vValue .= $this->_vMediaBaseUrl;
+                            break;
+                        case 'catalog_image_base_url':
+                            $vValue .= $this->_vCatalogImageBaseUrl;
                             break;
                     }
                 } elseif (substr($vType, 0, 9) == 'singleton') {
