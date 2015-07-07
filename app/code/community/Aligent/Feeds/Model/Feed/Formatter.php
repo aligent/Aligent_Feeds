@@ -31,7 +31,7 @@ class Aligent_Feeds_Model_Feed_Formatter {
         $this->_oStore = $oStore;
         $this->_vBaseUrl = $oStore->getBaseUrl();
         $this->_vMediaBaseUrl = $oStore->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-        $this->_vCatalogImageBaseUrl = $this->_vMediaBaseUrl . 'catalog/product/';
+        $this->_vCatalogImageBaseUrl = $this->_vMediaBaseUrl . 'catalog/product';
 
         return $this;
     }
