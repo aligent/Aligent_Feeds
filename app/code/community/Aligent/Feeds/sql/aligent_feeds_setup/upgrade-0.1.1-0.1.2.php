@@ -14,4 +14,8 @@ $oCatalogSetup->addAttribute('catalog_category', 'use_as_product_type_in_feed', 
     'default'  => 1,
 ));
 
+$process = Mage::getModel('index/indexer')->getProcessByCode('catalog_category_flat');
+$process->reindexEverything();
+Mage::dispatchEvent($process->getIndexerCode() . '_shell_reindex_after');
+
 $oCatalogSetup->endSetup();
