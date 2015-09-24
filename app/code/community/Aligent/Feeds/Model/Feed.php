@@ -51,6 +51,7 @@ class Aligent_Feeds_Model_Feed {
             ->joinInner(array('ccp2' => 'catalog_category_product'), 'ccf.entity_id=ccp2.category_id', array())
             ->where('ccp2.product_id=main_table.entity_id')
             ->where('ccf.is_active=1')
+            ->where('ccf.use_as_product_type_in_feed=1')
             ->order('level ' . Zend_Db_Select::SQL_DESC)
             ->limit(1);
 
