@@ -35,7 +35,6 @@ $aAttrData = array(
     'visible_on_front'          => '0',
     'is_html_allowed_on_front'  => '1'
 );
-$installer->removeAttribute($vType,$vAttrCode);
 $installer->addAttribute($vType,$vAttrCode,$aAttrData);
 
 
