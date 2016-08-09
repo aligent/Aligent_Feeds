@@ -43,6 +43,19 @@ class Aligent_Feeds_Model_Source_Condition extends Mage_Eav_Model_Entity_Attribu
         return $aOptions;
     }
 
+    public function getEbayValue($iOptionId) {
+        switch ($iOptionId) {
+            case self::CONDITION_NEW:
+                return 'New';
+            case self::CONDITION_USED:
+                return 'Used';
+            case self::CONDITION_REFURBISHED:
+                return 'Refurbished';
+            default:
+                return '';
+        }
+    }
+
     public function getGoogleValue($iOptionId) {
         switch ($iOptionId) {
             case self::CONDITION_NEW:
