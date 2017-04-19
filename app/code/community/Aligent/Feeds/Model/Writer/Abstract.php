@@ -30,7 +30,7 @@ abstract class Aligent_Feeds_Model_Writer_Abstract extends Varien_Object {
     abstract function close();
 
     protected function _getFilename($vStoreCode, $vFeedname) {
-        $vFeedDir = Mage::getBaseDir().self::FEED_PATH;
+        $vFeedDir = $this->_getFeedDir();
         if (!is_dir($vFeedDir)) {
             Mage::getSingleton('aligent_feeds/log')->log("Feed export directory does not exist: ".$vFeedDir);
             return false;
@@ -46,6 +46,15 @@ abstract class Aligent_Feeds_Model_Writer_Abstract extends Varien_Object {
             return false;
         }
 
+    }
+
+    /**
+     * Separate function so local module can potentially overwrite it
+     * @return string
+     */
+    protected function _getFeedDir()
+    {
+        return $vFeedDir = Mage::getBaseDir().self::FEED_PATH;
     }
 
 }

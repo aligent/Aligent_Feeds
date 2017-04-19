@@ -11,6 +11,6 @@
 class Aligent_Feeds_Model_Translator_Availability
 {
     public function translate($aRow) {
-        return $aRow['availability'] ? 'In Stock' : 'Out Of Stock';
+        return !empty($aRow['availability']) ? 'In Stock' : 'Out Of Stock';
     }
 }
