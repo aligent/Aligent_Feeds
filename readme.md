@@ -14,7 +14,8 @@ All attributes in the data feed must be stored in Magento's Flat tables.
 
 Installation Instructions
 -------------------------
-1. Install this module via modman
+1. Install this module via modman or composer
+2. create folder `/feeds` in your magento root 
 
 Uninstallation
 --------------
