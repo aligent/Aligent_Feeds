@@ -17,6 +17,13 @@ Installation Instructions
 1. Install this module via modman or composer
 2. create folder `/feeds` in your magento root 
 
+Extending
+-------------------------
+1. In your local module config add `<feeds></feed>` and this config will be merged
+2. Inside each field it calculates `<attribute> <value> <special> <singleton> and concats the result`
+3. Product attributes must exist in flat table
+4. For dropdown attribute i.e `gshopping_category` use `gshopping_category_value`. In flat table that will hold the actual value 
+
 Uninstallation
 --------------
 1. Delete .modman/Aligent_Feeds and run "modman repair"
