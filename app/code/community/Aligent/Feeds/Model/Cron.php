@@ -45,9 +45,6 @@ class Aligent_Feeds_Model_Cron {
             });
         } catch (Exception $e) {
             Mage::logException($e);
-            if (Mage::getIsDeveloperMode()){
-                throw $e;
-            }
             Mage::getSingleton('aligent_feeds/status')->addError('', "Exception during feed generation: ".$e->getMessage());
         }
 
