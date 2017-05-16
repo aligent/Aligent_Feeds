@@ -53,6 +53,9 @@ class Aligent_Feeds_Model_Feed_Formatter {
             }
             $vValue = '';
             foreach ($oFieldConfig->children() as $vType => $data) {
+                if ((string)$data === '__ignore__') {
+                    continue;
+                }
                 if (substr($vType, 0, 9) == 'attribute') {
                     $vAttribute = (string) $data;
                     $vAttributeValue = '';
