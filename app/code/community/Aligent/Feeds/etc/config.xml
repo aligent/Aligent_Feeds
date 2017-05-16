@@ -113,7 +113,11 @@
                 </availability>
                 <price>
                     <xml_tag>g:price</xml_tag>
-                    <attribute>price</attribute>
+                    <singleton>
+                        <class>aligent_feeds/translator_translate</class>
+                        <method>price</method>
+                        <field>price</field>
+                    </singleton>
                 </price>
                 <special_price>
                     <header>sale price</header>
