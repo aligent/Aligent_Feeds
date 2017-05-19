@@ -122,7 +122,11 @@
                 <special_price>
                     <header>sale price</header>
                     <xml_tag>g:sale_price</xml_tag>
-                    <attribute>special_price</attribute>
+                    <singleton>
+                        <class>aligent_feeds/translator_translate</class>
+                        <method>price</method>
+                        <field>special_price</field>
+                    </singleton>
                 </special_price>
                 <special_price_date>
                     <header>sale price effective date</header>
