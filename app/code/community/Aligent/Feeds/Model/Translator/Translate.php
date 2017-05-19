@@ -19,7 +19,11 @@ class Aligent_Feeds_Model_Translator_Translate {
      * @return mixed
      */
     public function price($aRow, $vField, $oStore) {
-        $fPrice= $aRow['price'];
+        //price is 0/null useful in case of special_price
+        if (empty($aRow[$vField])){
+            return null;
+        }
+        $fPrice= $aRow[$vField];
         /**
          * @see Mage_Core_Helper_Data::currencyByStore()  (static function)
          */
