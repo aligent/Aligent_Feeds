@@ -4,6 +4,9 @@
         <Aligent_Feeds>
             <active>true</active>
             <codePool>community</codePool>
+            <depends>
+                <Enterprise_Index/>
+            </depends>
         </Aligent_Feeds>
     </modules>
 </config>
