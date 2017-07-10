@@ -14,7 +14,9 @@ class Aligent_Feeds_Model_Translator_Categories
     public function translate($aRow, $vField, $oStore, $params) {
         $oProduct = Mage::getModel('catalog/product');
         $oProduct->setId($aRow['entity_id']);
-        $cCategories = $oProduct->getResource()->getCategoryCollection($oProduct);
+        $cCategories = $oProduct->getResource()
+            ->getCategoryCollection($oProduct)
+            ->addIsActiveFilter();
 
         $aPaths = array();
 
