@@ -81,5 +81,6 @@ class Aligent_Feeds_Model_Status extends Varien_Object {
             $mail->send();
         }
         Mage::dispatchEvent('aligent_feeds_complete', array('success'=>$aSuccess) );
+
     }
 }
