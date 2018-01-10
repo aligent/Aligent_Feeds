@@ -39,7 +39,9 @@ class Aligent_Feeds_Model_Cron {
                     Mage::getSingleton('aligent_feeds/status')->setFeedName($vFeedName);
                     $vConfigName = Aligent_Feeds_Model_Cron::CONFIG_ENABLED_PREFIX.$vFeedName;
                     if (Mage::getStoreConfigFlag($vConfigName, $oStore->getId())) {
+                        Mage::dispatchEvent('aligent_feeds_read_feed_xml', array('feed'=>&$oFeed, 'store' => $oStore));
                         Mage::getModel('aligent_feeds/feed')->export($oStore, $vFeedName, $oFeed);
+                        Mage::dispatchEvent('aligent_feeds_feed_complete', array('feed'=>&$oFeed, 'store' => $oStore));
                     }
                 }
             });
